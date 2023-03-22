@@ -1,0 +1,22 @@
+version: '3'
+services:
+  app:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '81:81'
+      # - '443:443'
+      - 2000:2000
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+      - ./conf.d:/etc/nginx/sites-available/conf.d
+    depends_on:
+      - api
+  api:
+    container_name: nodejs_api
+    build:
+      context: ./tester
+    ports:
+      - 3000:3000 
